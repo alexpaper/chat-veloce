@@ -33,6 +33,8 @@ form.addEventListener('submit', e => {
         if (msg.includes('username') && msg.includes('male')) {
             // Split
             msg = msg.split(' ');
+            // SOCKET EMIT NEW NAME TO ALL USERS IN THE CHAT ROOM
+            socket.emit('new-name-out', ({ id: myId, newName: `<img class='profile-img' src='/imgs/user.svg'> ${msg[1]}` }));
             // Change id with name
             myId = `<img class='profile-img' src='/imgs/user.svg'> ${msg[1]}`;
             // Set username
@@ -44,6 +46,8 @@ form.addEventListener('submit', e => {
         } else if (msg.includes('username') && msg.includes('woman')) {
             // Split
             msg = msg.split(' ');
+            // SOCKET EMIT NEW NAME TO ALL USERS IN THE CHAT ROOM
+            socket.emit('new-name-out', ({ id: myId, newName: `<img class='profile-img' src='/imgs/woman.svg'> ${msg[1]}` }));
             // Change id with name
             myId = `<img class='profile-img' src='/imgs/woman.svg'> ${msg[1]}`;
             // Set username
@@ -55,6 +59,8 @@ form.addEventListener('submit', e => {
         } else if (msg.includes('username') && msg.includes('free')) {
             // Split
             msg = msg.split(' ');
+            // SOCKET EMIT NEW NAME TO ALL USERS IN THE CHAT ROOM
+            socket.emit('new-name-out', ({ id: myId, newName: `<img class='profile-img' src='/imgs/gender.svg'> ${msg[1]}` }));
             // Change id with name
             myId = `<img class='profile-img' src='/imgs/gender.svg'> ${msg[1]}`;
             // Set username
@@ -66,6 +72,8 @@ form.addEventListener('submit', e => {
         } else {
             // Split
             msg = msg.split(' ');
+            // SOCKET EMIT NEW NAME TO ALL USERS IN THE CHAT ROOM
+            socket.emit('new-name-out', ({ id: myId, newName: `<img class='profile-img' src='/imgs/user.svg'> ${msg[1]}` }));
             // Change id with name
             myId = `<img class='profile-img' src='/imgs/user.svg'> ${msg[1]}`;
             // Set username
@@ -146,6 +154,17 @@ socket.on('connect', () => {
     socket.on('says-in', msg => {
         // SHOW BOARD MESSAGE
         boardMessage(`${msg}`)
+    });
+    // ON NEW NAME IN
+    socket.on('new-name-in', ({ id, newName }) => {
+        // console.log(id, newName);
+        // Delete old id name
+        userJoined = userJoined.filter(u => u !== id);
+        // Add new username
+        userJoined.push(newName);
+        // Show new names
+        usersIn(userJoined);
+
     });
 });
 // USERS IN
